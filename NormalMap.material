@@ -1,0 +1,49 @@
+vertex_program normal_map_shader/vs glsl 
+{
+    source NormalMapMaterialVp.glsl 
+
+    default_params
+    {
+        param_named_auto world_mat world_matrix
+        param_named_auto view_mat view_matrix
+        param_named_auto projection_mat projection_matrix
+		param_named_auto normal_mat inverse_transpose_worldview_matrix
+		param_named light_position float3 -0.5 -0.5 1.5;
+    }
+}
+
+
+fragment_program normal_map_shader/fs glsl 
+{
+    source NormalMapMaterialFp.glsl 
+
+	default_params
+	{
+		 param_named object_colour float4 0.49 0.36 0.20 1.0
+		 param_named normal_map int 0
+	}
+}
+
+
+material NormalMapMaterial
+{
+    technique
+    {
+        pass
+        {
+            vertex_program_ref normal_map_shader/vs
+            {
+            }
+
+            fragment_program_ref normal_map_shader/fs
+            {
+            }
+
+			texture_unit {
+				texture_alias normal_map
+				texture normal_map2.png 2d
+				//texture normal_map.png 2d
+			}
+        } 
+    }
+}
